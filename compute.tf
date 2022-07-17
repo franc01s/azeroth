@@ -33,11 +33,17 @@ resource "exoscale_compute_instance" "azeroth" {
         - docker-ce
         - docker-ce-cli
         - containerd.io
+        - unzip
+        - tmux
       # Enable ipv4 forwarding, required on CIS hardened machines
       write_files:
         - path: /etc/sysctl.d/enabled_ipv4_forwarding.conf
           content: |
             net.ipv4.conf.all.forwarding=1
+      runcmd:
+          - [ wget, "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64", -O, /usr/local/bin/docker-compose ]
+          - chmod  +x  /usr/local/bin/docker-compose
+          - git clone https://github.com/azerothcore/azerothcore-wotlk.git /home/debian/azerothcore-wotlk
       # create the docker group
       groups:
         - docker
@@ -47,4 +53,5 @@ resource "exoscale_compute_instance" "azeroth" {
           groups: [docker]
       EOF
 }
+
 

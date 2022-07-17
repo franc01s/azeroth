@@ -1,3 +1,5 @@
 .idea
 .terraform
+.env
 .terraform.lock.hcl
+providers.tf
